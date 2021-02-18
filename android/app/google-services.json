@@ -1,0 +1,93 @@
+{
+  "project_info": {
+    "project_number": "284275940374",
+    "firebase_url": "https://yak-vernac-app.firebaseio.com",
+    "project_id": "yak-vernac-app",
+    "storage_bucket": "yak-vernac-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:284275940374:android:5d84ed20450ce6ebdc2937",
+        "android_client_info": {
+          "package_name": "com.info.yakvernac"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "284275940374-7frr94qo2aoej2a0ekgl1mguvsgjvo9c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBcV8QCqM7YFYu6c9_6mjOt9bHDxo_F6sY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "284275940374-7frr94qo2aoej2a0ekgl1mguvsgjvo9c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:284275940374:android:e1821741b417c048dc2937",
+        "android_client_info": {
+          "package_name": "com.yakvernac"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "284275940374-cn20h5mhpvejtfbfrphrukbobub9qpkt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.yakvernac",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "284275940374-j482q595oa92k8qqrt1oql735gsj9a12.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.yakvernac",
+            "certificate_hash": "131eb23e30903cb38a9e9c80697b91e8a8071fb4"
+          }
+        },
+        {
+          "client_id": "284275940374-qpap8lmbiueun06mtfgmjci5bo95qr7u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.yakvernac",
+            "certificate_hash": "6f6c7d272788e2e85f76eb1144c889a6f7c98744"
+          }
+        },
+        {
+          "client_id": "284275940374-7frr94qo2aoej2a0ekgl1mguvsgjvo9c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBcV8QCqM7YFYu6c9_6mjOt9bHDxo_F6sY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "284275940374-7frr94qo2aoej2a0ekgl1mguvsgjvo9c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

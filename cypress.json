@@ -1,0 +1,14 @@
+{
+<<<<<<< HEAD
+    
+
+        "baseUrl": "http://localhost:19006/",
+        "projectId":"com.yakvernac.yakvernac"
+    
+    
+=======
+
+    "baseUrl": "http://localhost:3000",
+    "projectId":"com.yakvernac.yakvernac"
+>>>>>>> 7ff5364ef0a8ead6d40bb14d570e619367f4314a
+}

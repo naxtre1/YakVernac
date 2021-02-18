@@ -1,0 +1,5 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name" tools:ignore="MissingTranslation">YakVernac</string>
+    <string name="facebook_app_id" translatable="false">175166697624196</string>
+<!--    //257128435519289-->
+</resources>

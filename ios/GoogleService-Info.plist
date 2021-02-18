@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>284275940374-6jg17jh00svmshdikra0ouvkfcurgpvp.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.284275940374-6jg17jh00svmshdikra0ouvkfcurgpvp</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>284275940374-cn20h5mhpvejtfbfrphrukbobub9qpkt.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAnSCV73KbC0yS9V5q5uV0RZuaNmV2sUlQ</string>
+	<key>GCM_SENDER_ID</key>
+	<string>284275940374</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.app.yakVernac</string>
+	<key>PROJECT_ID</key>
+	<string>yak-vernac-app</string>
+	<key>STORAGE_BUCKET</key>
+	<string>yak-vernac-app.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:284275940374:ios:f04d4d6894768962dc2937</string>
+	<key>DATABASE_URL</key>
+	<string>https://yak-vernac-app.firebaseio.com</string>
+</dict>
+</plist>
