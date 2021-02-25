@@ -17,9 +17,10 @@ import { strings } from '../locales/i18n';
 import { shuffle } from '../static/constant'
 import { setLang } from '../redux/action'
 import { connect } from 'react-redux'
-import { Thumbnail } from 'react-native-thumbnail-video';
-import RNUrlPreview from 'react-native-url-preview';
-import * as VideoThumbnails from 'expo-video-thumbnails';
+import { Ionicons } from "@expo/vector-icons";
+
+import { createThumbnail } from "react-native-create-thumbnail";
+
 
 
 const deviceWidth = Dimensions.get("window").width
@@ -29,6 +30,18 @@ const OnePost = ({ rowData, navigation, query, user, onSoundPlay, isblockList, r
     console.log("rowData");
     console.log(rowData);
     useEffect(() => {
+        if (!videoURL) {
+            return;
+          }
+      
+          createThumbnail({
+            url: videoURL,
+         
+          })
+            .then(response => {
+              setThumbnail(response.path);
+            })
+            .catch(error => alert({ error }));
         firestore().collection('user').doc(rowData.uid).get().then(userProfileDoc => {
             if (userProfileDoc.exists) {
                 const userProfile = userProfileDoc.data()
@@ -65,6 +78,8 @@ const OnePost = ({ rowData, navigation, query, user, onSoundPlay, isblockList, r
     const [loveList, setLoveList] = useState(rowData.loveList)
     const [deleted, setDelected] = useState(false)
     const [hiddenList, setHiddenList] = useState(rowData.hiddenList)
+    const [path, setPath] = useState('');
+    const [thumbnail, setThumbnail] = useState('');
     const renderViewMore = (onPress) => {
         return (
             <Text style={{ textAlign: 'right', fontSize: p(14), color: '#70adca', }} onPress={onPress}>{strings('FriendsList.read_more')}</Text>
@@ -135,6 +150,21 @@ const OnePost = ({ rowData, navigation, query, user, onSoundPlay, isblockList, r
         }
     }
 
+
+    const generate = () => {
+        if (!videoURL) {
+          return;
+        }
+    
+        createThumbnail({
+          url: videoURL,
+       
+        })
+          .then(response => {
+            setThumbnail(response.path);
+          })
+          .catch(error => alert({ error }));
+      };
     // const startGame = (uid, gameID) => {
     //     // this.setState({ loadingScene: true })
     //     setLoading(true)
@@ -279,49 +309,6 @@ const OnePost = ({ rowData, navigation, query, user, onSoundPlay, isblockList, r
         }
     }
 
-    const generateThumbnail = async () => {
-        try {
-          const { uri } = await VideoThumbnails.getThumbnailAsync(
-            'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
-            {
-              time: 15000,
-            }
-          );
-          setImage(uri);
-        } catch (e) {
-          console.warn(e);
-        }
-      };
-
-    // const deletePost = () => {
-    //     setLoading(true);
-    //     firestore().collection('Post').doc(user.uid).delete().then((_) => {
-            // firestore().collection('user').doc(user.uid).collection('media').where('id', '==', id).get().then((snapshot) => {
-            //     if (snapshot.docs.length > 0) {
-            //         firestore().collection('user').doc(user.uid).collection('media').doc(snapshot.docs[0].id).delete().then((_) => {
-            //             setLoading(false);
-            //             refreshPage();
-            //             navigation.goBack();
-            //         }).catch((e) => {
-            //             setLoading(false);
-            //             console.log("e : ", e);
-            //         });
-            //     } else {
-            //         setLoading(false);
-            //     }
-            // }).catch((e) => {
-            //     setLoading(false);
-            //     console.log("e : ", e);
-            // });
-    //     }).catch((e) => {
-    //         setLoading(false);
-    //         console.log("e : ", e);
-    //     });
-    // }
-
-    // if (query !== '' && username.toLowerCase().indexOf(query.toLowerCase()) === -1) {
-    //     return <View />
-    // }
     if (query !== '' && username.toLowerCase() == query.toLowerCase()) {
         return <View />
     }
@@ -414,12 +401,28 @@ const OnePost = ({ rowData, navigation, query, user, onSoundPlay, isblockList, r
                 </View>
             }
             {
-                // videoURL !== undefined && 
-               <View style={styles.container}>
-                    <TouchableOpacity onPress={generateThumbnail} title="Generate thumbnail" />
-      {image && <Image source={{ uri: image }} style={styles.image} />}
-      <Text>{image}</Text>
-                   {/* <Thumbnail  url={"https://www.youtube.com/watch?v=w7ejDZ8SWv8"} />  */}
+                videoURL !== undefined && videoURL !== ''&& 
+               <View >
+                {/* <TouchableOpacity
+        title="Generate Thumbnail"
+        onPress={generate}
+      /> */}
+      {/* <Text  > ☆THUMBNAIL☆</Text> */}
+      
+      {!!thumbnail && (
+          <TouchableOpacity onPress={()=>{  navigation.navigate('VideoWebView', { videoUrl: videoURL }) }} >
+          
+        <ImageBackground  style={{ marginHorizontal: p(10), height: (deviceWidth - p(80)) * 3 / 4, alignItems: 'center', justifyContent: 'center' }}  source={{ uri: thumbnail }}>
+        <View style={{flex:1,justifyContent: 'center',alignItems: 'center'}}>
+        <Image  style={styles.imageicon} source={require('../assets/videoplay.png')}/>
+        </View>
+        </ImageBackground>
+        
+        
+        </TouchableOpacity>
+      )}
+ 
+                   {/* <Thumbnail  url={"https://firebasestorage.googleapis.com/v0/b/yak-vernac-app.appspot.com/o/video%2FDwcooNweRCbM6E57m1VMwl4uMAW2%2F1613134693524.mp4?alt=media&token=3557eb55-a1d5-4511-98ba-3932baa7e444"} />  */}
                           
                   {/* <RNUrlPreview text={videoURL}/> */}
                 </View> 
@@ -549,14 +552,23 @@ const styles = {
         backgroundColor: '#F5FCFF',
       },
       image: {
-        width: 200,
-        height: 200,
+       flex:1,
+       width:'100%'
+       
+        
+      
+      },
+      imageicon: {
+        width: 40,
+        height: 40,
+        resizeMode:'cover'
       },
 };
 
 function mapStateToProps(state) {
     return {
         lang: state.lang
+        
     }
 }
 

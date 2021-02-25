@@ -1,5 +1,5 @@
 import React, { Component, useEffect, createRef } from 'react';
-import { Text, View, Button, TextInput, Image, ImageBackground, TouchableOpacity, ScrollView, Dimensions, FlatList, ActivityIndicator, Platform } from 'react-native';
+import {Text, View, Button, TextInput, Image, ImageBackground, TouchableOpacity, ScrollView, Dimensions, FlatList, ActivityIndicator, Platform } from 'react-native';
 import ListView from 'deprecated-react-native-listview';
 import { CustomHeader } from './common/CustomHeader';
 import { p } from './common/normalize'
@@ -21,6 +21,7 @@ import { setLang } from '../redux/action'
 import OnePost from './OnePost'
 import { NavigationEvents } from 'react-navigation'
 import { getStatusBarHeight } from 'react-native-status-bar-height';
+import AsyncStorage from '@react-native-community/async-storage';
 
 // const Blob = RNFetchBlob.polyfill.Blob
 // const fs = RNFetchBlob.fs
@@ -53,11 +54,16 @@ class PostScreen extends Component {
 			loadingScene: false,
 			query: '',
 			items: [],
+			recentitem: [],
 			isModalVisible: false,
 			text: '',
 			blockList: [],
 			referenceToOldestKey: '',
-			loadingFromServer: false
+			loadingFromServer: false,
+			SearchInputValueHolder: '',
+			searchTag: '',
+			searchData: [],
+			// asyncVal: []
 		}
 	
 	}
@@ -257,9 +263,8 @@ class PostScreen extends Component {
 	// }
 
 	componentDidMount() {
-		
 		console.log("height5",getStatusBarHeight());
-		this.loadMoreData(true);
+		// this.loadMoreData(true);
 		_onFinishedPlayingSubscription = SoundPlayer.addEventListener('FinishedPlaying', ({ success }) => {
 			console.log('finished playing', success)
 			this.stopSoundPlayerByUpdatingItems();
@@ -285,7 +290,8 @@ class PostScreen extends Component {
 			text: '',
 			blockList: [],
 			referenceToOldestKey: '',
-			loadingFromServer: false
+			loadingFromServer: false,
+			searchTag: ''
 		});
 	
 		_onFinishedPlayingSubscription = SoundPlayer.addEventListener('FinishedPlaying', ({ success }) => {
@@ -477,7 +483,12 @@ class PostScreen extends Component {
 		  
 	}
 
+	getListViewItem = (item) => {  
+        // Alert.alert(item.key);  
+    }  
+
 	loadMoreData = async (isRefresh) => {
+		// alert('load data')
 		this.setState({ loadingFromServer: true });
 		if (!this.state.referenceToOldestKey || isRefresh) {
 			firestore().collection('Post')
@@ -648,6 +659,175 @@ class PostScreen extends Component {
 		}
 	}
 
+
+
+	usernameSearchData = async () => {
+		this.setState({ loadingFromServer: true });
+		let searchString = this.state.query;
+		firestore().collection('Post')
+				.limit(10).where("username", "==", searchString)
+				// .orderBy('id', 'desc')
+				// .orderBy(firestore.FieldPath.documentId())
+				.get()
+				.then((snapshot) => {
+					
+					let items = [];
+					for (const doc of snapshot.docs) {
+						try {
+							const data = doc.data()
+							const item = {
+								id: doc.id,
+								uid: data.uid,
+								gameID: data.gameID,
+								gameName: data.gameName,
+								gameLang: data.gameLang,
+								username: data.username,
+								myPic: data.profilePics && data.profilePics.length > 0 ? data.profilePics[data.profilePics.length - 1].illustration : data.myPic,
+								postlang: data.postlang,
+								postmessage: data.postmessage,
+								loveList: data.loveList ? data.loveList : [],
+								// commentList: data.commentList === undefined ? [] : data.commentList,
+								hiddenList: data.hiddenList === undefined ? [] : data.hiddenList,
+								postDate: data.postDate,
+								isHide: data.isHide,
+								isEn: data.isEn,
+								imageURL: data.imageURL,
+								audioURL: data.audioURL,
+								videoURL: data.videoURL,
+								audioDuration: data.audioDuration,
+								isMore: false,
+								isAudioPlaying: false
+							}
+							items.push(item)
+
+
+							// items.map((item => {item.username}))
+							// this.storeData(this.state.SearchInputValueHolder)
+							
+						} catch (error) {
+							continue
+						}
+					}
+				
+					// const reverseItems = items.reverse()
+					// const allData = this.postSearchData('All');
+					
+					// if (allData && allData.length > 0) {
+					// 	items.push(...allData);
+					// }
+					
+				});
+		} 
+
+
+
+	allSearchData = async (key) => {
+		this.setState({items: []})
+		let searchString = this.state.query;
+		this.storeData(searchString)
+		this.setState({ searchTag: key });
+		if (key=== 'postmessage') {
+			searchString = '#' + searchString;	
+		}else if (key === 'All') {
+			this.usernameSearchData();
+			
+			// return;
+		}
+				this.setState({ loadingFromServer: true });
+					firestore().collection('Post')
+						.limit(10).where(key, '==', searchString)
+						.get()
+						.then((snapshot) => {
+							let items = [];
+							for (const doc of snapshot.docs) {
+								try {
+									const data = doc.data()
+									// alert("snapshot : ", data);
+									const item = {
+										id: doc.id,
+										uid: data.uid,
+										gameID: data.gameID,
+										gameName: data.gameName,
+										gameLang: data.gameLang,
+										username: data.username,
+										myPic: data.profilePics && data.profilePics.length > 0 ? data.profilePics[data.profilePics.length - 1].illustration : data.myPic,
+										postlang: data.postlang,
+										postmessage: data.postmessage,
+										loveList: data.loveList ? data.loveList : [],
+										// commentList: data.commentList === undefined ? [] : data.commentList,
+										hiddenList: data.hiddenList === undefined ? [] : data.hiddenList,
+										postDate: data.postDate,
+										isHide: data.isHide,
+										isEn: data.isEn,
+										imageURL: data.imageURL,
+										audioURL: data.audioURL,
+										videoURL: data.videoURL,
+										audioDuration: data.audioDuration,
+										isMore: false,
+										isAudioPlaying: false
+									}
+									
+										items.push(item)
+										//searchData.push(searchString)
+										
+									
+										// responseJson.forEach((item, key) => {
+										// 	var productID = item.id;
+										// 	items[productID] = item.username
+										//  })
+								//  alert(item)
+									
+									
+								} catch (error) {
+									continue
+								}
+							}
+							// const reverseItems = items.reverse()
+
+						
+		
+							this.setState({
+								items: items,
+								// loadingScene: false
+							});
+							// const postID = this.props.navigation.getParam('id')
+							// if (postID) {
+							// 	var index = 0
+							// 	var postIndex = 0
+							// 	for (; index < reverseItems.length; index++) {
+							// 		if (postID == reverseItems[index].id) {
+							// 			postIndex = index
+							// 			break
+							// 		}
+							// 	}
+							// 	// rowData={item}
+							// 	// index={index}
+							// 	// navigation={this.props.navigation}
+							// 	// query={this.state.query}
+							// 	// user={this.props.user}
+							// 	// onSoundPlay={this.onSoundPlay}
+							// 	// blockList={this.state.blockList}
+							// 	// startGame={this.startGame}
+							// 	// setTimeout(() => {
+							// 	// 	this.props.navigation.push('ViewPost', {
+							// 	// 		rowData: reverseItems[index],
+							// 	// 		index: postIndex,
+							// 	// 		navigation: this.props.navigation,
+							// 	// 		query: this.state.query,
+							// 	// 		user: this.props.user,
+							// 	// 		onSoundPlay: this.onSoundPlay,
+							// 	// 		blockList: this.state.blockList,
+							// 	// 		startGame: null,
+							// 	// 		refreshPage: this.refreshPage,
+							// 	// 		setLoading: this.setLoading
+							// 	// 	})
+							// 	// }, 1000)
+							// }
+							// this.setState({ referenceToOldestKey: snapshot.docs[snapshot.docs.length - 1].id, loadingFromServer: false });
+						});
+				} 
+	
+
 	renderFooter = () => {
 		return (
 			<View style={styles.footer}>
@@ -657,6 +837,44 @@ class PostScreen extends Component {
 			</View>
 		);
 	}
+
+	 storeData = async (value) => {
+		//  alert( value)
+		try {
+			if(this.state.searchData.indexOf(value) !== -1){
+			  }else{
+				 this.state.searchData.push(value);
+				await AsyncStorage.setItem('@storage_Key', JSON.stringify(this.state.searchData))
+				// alert(this.state.searchData)
+			  }
+		
+		} catch (e) {
+		  // saving error
+		}
+	  }
+	
+	   readData = async () => {
+		try {	
+			const data = await AsyncStorage.getItem('@storage_Key');
+		
+		  if (data !== null) {
+			this.setState({ searchTag: 'recentSearch' });
+			this.setState({ searchData: JSON.parse(data) });
+			
+			// alert(this.state.searchData)
+			// setAge(data)
+		  }
+		} catch (e) {
+		  alert('Failed to fetch the data from storage')
+		}
+	  }
+
+	  emptyComponent= () => {
+		return(
+		<View style={{flex: 1, justifyContent:'center', alignItems:'center'}}>
+		  <Text style={{ paddingLeft: p(10), marginTop: p(15), fontSize: p(16), justifyContent:'center', alignItems: 'center' }}>No Data found</Text>
+		</View>);
+	  }
 
 	render() {
 		var height = getStatusBarHeight();
@@ -714,14 +932,29 @@ class PostScreen extends Component {
 										underlineColorAndroid="transparent"
 										autoCapitalize="none"
 										onChangeText={text => {
-											this.setState({ query: text })
+											this.setState({ query: text})
+											if(text.length == 0){
+												this.refreshPage()
+											}
 										}}
+										
+										onFocus={() => this.readData()}
 									/>
 									<View style={{ position: 'absolute', right: p(0), justifyContent: 'center', alignItems: 'center', backgroundColor: '#c3e3e5', width: p(40), height: p(40), borderRadius: p(20) }}>
 										<Icon
 											name='search'
 											type='font-awesome'
 											color='#88b7c3'
+											onPress={()=>{
+											// this.storeData(this.state.SearchInputValueHolder)
+											if(this.state.query !== ''){
+												this.allSearchData('username')
+											}else{
+												alert("Please enter value for search")
+											}
+											
+											}}
+		
 										/>
 									</View>
 								</View>
@@ -749,22 +982,40 @@ class PostScreen extends Component {
 							</View>
 
 							<View style={{ width: '100%', height: p(40), marginTop: p(10), marginHorizontal: 15, flexDirection: 'row', backgroundColor: colors.mainBackground}}>
-								<TouchableOpacity  >
-                                <Text style={{ width: 64, height: 20, backgroundColor: 'white',  color: 'grey', textAlign: 'center', fontSize: 12, textAlignVertical: 'center' }}>{'All'}</Text>
+								{/* <TouchableOpacity 	onPress={() => { 
+									
+									this.allSearchData('All')
+									
+									}} >
+                                <Text style={{ width: p(64), height: p(20), backgroundColor: 'white',  color: 'grey', textAlign: 'center', fontSize: 12, textAlignVertical: 'center' }}>{'ALL'}</Text>
+								</TouchableOpacity   > */}
+
+								<TouchableOpacity onPress={() => { 
+								if(this.state.query !== ''){
+									this.allSearchData('username')
+								}else{
+									alert("Please enter value for search")
+								}
+									}} >
+                                <Text style={{ width: p(64), height: p(20), backgroundColor: 'white',  color: 'grey', textAlign: 'center', fontSize: 15, textAlignVertical: 'center' }}>{'PEOPLE'}</Text>
 								</TouchableOpacity>
 
-								<TouchableOpacity  >
-                                <Text style={{ width: 64, height: 20, backgroundColor: 'white',  color: 'grey', textAlign: 'center', fontSize: 12, textAlignVertical: 'center' }}>{'PEOPLE'}</Text>
-								</TouchableOpacity>
-
-								<TouchableOpacity  >
-                                <Text style={{ width: 64, height: 20, backgroundColor: 'white',  color: 'grey', textAlign: 'center', fontSize: 12, textAlignVertical: 'center' }}>{'TAGS'}</Text>
+								<TouchableOpacity  onPress={() => {
+										if(this.state.query !== ''){
+											this.allSearchData('postmessage')
+										}else{
+											alert("Please enter value for search")
+										}
+									
+								
+									}} >
+                                <Text style={{ width: p(64), height: p(20), backgroundColor: 'white',  color: 'grey', textAlign: 'center', fontSize: 15, textAlignVertical: 'center' }}>{'TAGS'}</Text>
 								</TouchableOpacity>
 							</View>
 
 
-
-							<View style={{ width: '100%', height: p(40), marginTop: p(10) }}>
+							{
+								this.state.query =='' && this.state.searchTag == ''? <View style={{ width: '100%', height: p(40), marginTop: p(10) }}>
 								<TouchableOpacity onPress={() => {
 									const { navigate } = this.props.navigation;
 									navigate('NewPost', { onRefresh: this.refreshPage });
@@ -772,24 +1023,11 @@ class PostScreen extends Component {
 									<Text style={{ flex: 1, fontSize: p(20), textAlign: 'left', color: '#70adca' }}>{strings('FriendsList.new_post')}</Text>
 									<MaterialCommunityIcons name='plus' size={p(18)} color='#70adca' />
 								</TouchableOpacity>
-							</View>
-							{/* <FlatList
-							ref={ref=>this.listRef=ref}
-							data={this.state.items}
-							style={{flex: 1}}
-							renderItem={({item, index})=>
-							<OnePost
-								rowData={item}
-								index={index}
-								navigation={this.props.navigation}
-								query={this.state.query}
-								user={this.props.user}
-								onSoundPlay={this.onSoundPlay}
-								blockList={this.state.blockList}
-								startGame={this.startGame}
-							/>
+							</View> : null
 							}
-						/> */}
+						
+						
+							
 							{/* <ScrollView scrollEnabled={true} style={{ marginTop: 10, flex: 1, marginHorizontal: p(20) }}>
 								{
 									this.state.items.map((rowData, index) =>
@@ -806,8 +1044,8 @@ class PostScreen extends Component {
 									)
 								}
 							</ScrollView> */}
-
-							<FlatList
+							{/* <View style={styles.MainContainer}> */}
+							{ this.state.query =='' && this.state.searchTag == '' ? <FlatList
 								contentContainerStyle={{ paddingBottom: 16 }}
 								showsVerticalScrollIndicator={false}
 								showsHorizontalScrollIndicator={false}
@@ -843,9 +1081,96 @@ class PostScreen extends Component {
 							// scrollEventThrottle={1000}
 							/>
 							
+	: 
+	 this.state.searchTag=='username'? 
+	// <View  >
+	// 	{ this.state.items.length == 0 &&  <Text style={{  paddingLeft: p(10), marginTop: p(15), fontSize: p(16), alignItems:'center', justifyContent:'center' }} >No Data found</Text> }
+		
+		<FlatList  
+	contentContainerStyle={{ padding: 16 }}
+	showsVerticalScrollIndicator={false}
+	showsHorizontalScrollIndicator={false}
+	data={this.state.items}
+	ListEmptyComponent={this.emptyComponent}
+	keyExtractor={(item, index) => `${index}`}
+			renderItem={({ item, index }) => {	
+				return (
+					<View style={{ flexDirection: 'row'}}>
+					 		 <Image source = {{ uri: item.myPic }} style={{ width: p(40), height: p(40), borderRadius: p(20), margin: p(10)}} />
+							<Text  style={{ paddingLeft: p(10), marginTop: p(15), fontSize: p(16) }}>{item.username}</Text>
+
+				 </View> 
+				) ;
+			} 
+			
+		}
+		/>
+		
+		
+		
+		
+		
+	// </View>
+	
+		// ListEmptyComponent={this.emptyComponent}
+		// 	renderItem={({item}) =>  
+		// // <View style={{ flexDirection: 'row'}}>
+		// 		// <Image source = {{ uri: item.myPic }} style={styles.imageView} />
+		// 		<Text  onPress={this.getListViewItem.bind(this, item)}>{item.username}</Text>
+		// </View>
+	 
+ : this.state.searchTag=='postmessage' ?
+
+ 		<FlatList  
+		 contentContainerStyle={{ padding: 16 }}
+		 showsVerticalScrollIndicator={false}
+		 showsHorizontalScrollIndicator={false}
+		 data={this.state.items}
+		 ListEmptyComponent={this.emptyComponent}
+		 keyExtractor={(item, index) => `${index}`}
+				 renderItem={({ item, index }) => {					 
+					 return (	  
+						<View style={{ flexDirection: 'row'}}>
+							<Image source={require('../assets/roundimg.png')}  style={{ width: p(40), height: p(40), borderRadius: p(20), margin: p(10)}} />
+							<Text  style={{ paddingLeft: p(10), marginTop: p(15), fontSize: p(16) }}>{item.postmessage}</Text>
+						</View> 
+					 );
+				 }}
+
+
+
+		// 		data={this.state.items}
+		// 		keyExtractor={item => item.userID}
+		// 		renderItem={({item}) =>  
+		// <Text  onPress={this.getListViewItem.bind(this, item)}>{item.postmessage}</Text>}  
+		// 		ItemSeparatorComponent={this.renderSeparator }
+				 /> : this.state.searchTag == 'recentSearch'? 
+			
+ 		<FlatList  
+		 contentContainerStyle={{ padding: 16 }}
+		 showsVerticalScrollIndicator={false}
+		 showsHorizontalScrollIndicator={false}
+		 data={this.state.searchData}
+	
+		//  keyExtractor={(item, index) => `${index}`}
+		   	 renderItem={({ item , index}) => {					 
+			return (	  	
+				<View style={{ flexDirection: 'column'}}>	
+				{/* <TouchableOpacity disabled={true}> */}
+					<Text  style={{ paddingLeft: p(10), marginTop: p(15), fontSize: p(16) }} >{item}</Text>
+					{/* </TouchableOpacity> */}
+				</View>
+			   
+			);
+		}
+	} /> 	 : null	}
+			   {/* </View> 	  */}
+
+			   
+							
 
 							{/* <FlatList
-								contentContainerStyle={{ paddingBottom: 16 }}
+								contentContainerStyle={{ paddingBottom: 16 }}0
 								showsVerticalScrollIndicator={false}
 								showsHorizontalScrollIndicator={false}
 								data={this.state.items}
@@ -966,6 +1291,22 @@ const styles = {
 		marginRight: p(30),
 		marginLeft: p(5),
 		textAlignVertical: 'bottom'
+	},
+	imageView: {
+ 
+		width: '50%',
+		height: 50 ,
+		margin: 7,
+		borderRadius : 7
+	 
+	},
+	MainContainer :{
+ 
+		justifyContent: 'center',
+		flex:1,
+		margin: 5,
+		marginTop: (Platform.OS === 'ios') ? 20 : 0,
+	 
 	}
 };
 

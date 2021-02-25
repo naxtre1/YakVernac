@@ -11,40 +11,39 @@
 #
 
 PROJECT_NAME = "YakVernac"
-XCODE_PROJECT = "./ios/#{PROJECT_NAME}.xcodeproj"
-XCODE_WORKSPACE = "./ios/#{PROJECT_NAME}.xcworkspace"
+XCODE_PROJECT = "./YakVernac.xcodeproj"
+XCODE_WORKSPACE = "./YakVernac.xcworkspace"
 OUTPUT_DIRECTORY = "./fastlane/builds"
-IPA_DIRECTORY = "#{OUTPUT_DIRECTORY}/#{PROJECT_NAME}.ipa"
-# TESTERS_FILE = "./fastlane/testers.txt"
+IPA_DIRECTORY = "#{OUTPUT_DIRECTORY}/YakVernac.ipa"
+TESTERS_FILE = "./fastlane/testers.txt"
 BUILD_FOR_DEVELOPMENT_ONLY = false # true = Build for Development | false = Build to create a release
 BUILD_ONLY = true
 
 # Uncomment the line if you want fastlane to automatically update itself
 # update_fastlane
-
 default_platform(:ios)
 
 platform :ios do
 
   private_lane :build do
     configuration_name = "Release"
-    export_options_method = "development"
-    code_sign_identity = "iPhone Developer"
+    export_options_method = "Distribution"
+    code_sign_identity = "iPhone Distribution"
     MY_APP_ID = "com.yakvernac.yakvernac"
-    MY_PROFILE = "match Development com.yakvernac.yakvernac"
+    MY_PROFILE = "Yakvernac_Distribution"
     MY_TEAM = "UY8K48LB7X"
     
     increment_build_number(xcodeproj: XCODE_PROJECT)
     
-    increment_version_number(
-      bump_type: "patch",
-      xcodeproj: XCODE_PROJECT,
-    )
+    # increment_version_number(
+    #   bump_type: "patch",
+    #   xcodeproj: XCODE_PROJECT,
+    # )
 
     settings_to_override = {
       :BUNDLE_IDENTIFIER => "com.yakvernac.yakvernac",
-      :PROVISIONING_PROFILE_SPECIFIER => "Yakvernac_Distribution",
-      :DEVELOPMENT_TEAM => "Nathan Wennerbom",
+      :PROVISIONING_PROFILE_SPECIFIER => 'Yakvernac_Distribution',
+      :DEVELOPMENT_TEAM => MY_TEAM,
     }
 
     create_keychain(
@@ -58,13 +57,13 @@ platform :ios do
 
     match(
       app_identifier: "com.yakvernac.yakvernac",
-      git_url: "https://github.com/YakVernac/react-native.git",
+      git_url: "https://github.com/meghaNax/YakVernac.git",
       type: "development",
-      username: "1546721654",
+      username: "wenno2u@gmail.com",
       team_id: "UY8K48LB7X",
       keychain_name: "Keychain",
       keychain_password: "naxtre",
-      readonly: true
+      readonly: false
     )
 
     update_code_signing_settings(
@@ -72,7 +71,7 @@ platform :ios do
       path: XCODE_PROJECT,
       code_sign_identity: code_sign_identity,
       bundle_identifier: "com.yakvernac.yakvernac",
-      "profile_name": "Yakvernac_Distribution"
+      profile_name: MY_PROFILE
     )
 
     gym(
@@ -84,13 +83,20 @@ platform :ios do
       output_directory: OUTPUT_DIRECTORY,
       output_name: "#{PROJECT_NAME}.ipa",
       export_options: {
-        method: "development",
+        method: "app-store",
         signingStyle: "manual",
         provisioningProfiles: { 
-            com.yakvernac.yakvernac => "Yakvernac_Distribution"
+          MY_APP_ID => MY_PROFILE
         }
       }
     )
+
+    upload_to_testflight(
+     username: "wenno2u@gmail.com",
+     app_identifier: "com.yakvernac.yakvernac",
+     team_id: "UY8K48LB7X",
+     ipa: IPA_DIRECTORY
+)
 
   end
   desc "Create Signed IPA Build"

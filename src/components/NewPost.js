@@ -165,7 +165,7 @@ class NewPost extends Component {
 			// 	.catch((error) => {
 			// 		reject(error)
 			// 		this.setState({ loadingScene: false })
-			// 		alert("Network Request Error")
+		
 
 			// 	})
 		})
@@ -314,10 +314,6 @@ class NewPost extends Component {
 	}
 
 	onCreatePostData(imageURL) {
-		// if (audioURL === '' && imageURL === '') {
-		//     alert("Please upload media data.");
-		//     return;
-		// }
 		
 		let currentDate = new Date();
 		let dateTime = this.formatTime(currentDate.getHours()) + ":" + this.formatTime(currentDate.getMinutes()) + " "
@@ -381,7 +377,7 @@ class NewPost extends Component {
 		}).catch((error) => {
 			//error callback
 			console.log('error ', error)
-			alert("Please try again.")
+	
 			this.setState({ loadingScene: false })
 		})
 	}
@@ -436,7 +432,7 @@ class NewPost extends Component {
 		}).catch((error) => {
 			//error callback
 			console.log('error ', error)
-			alert("Please try again.")
+		
 			this.setState({ loadingScene: false })
 		})
 	}
@@ -447,19 +443,19 @@ class NewPost extends Component {
 			return;
 		}
 		if (this.state.imageFile) {
-			// alert(this.state.imageFile.uri);
+			
 			this.setState({ loadingScene: true })
 			this.uploadFile('media', this.state.imageFile.path, "jpg")
 				.then(url => {
 					this.setState({ loadingScene: false });
 					ImagePicker.clean().then(() => {
 					}).catch(e => {
-						alert(e);
+						console.log(e);
 					});
 					this.onCreatePostData(url)
 				})
 				.catch(error => {
-					alert(error);
+					console.log(error);
 				});
 		}else if(this.state.videoFile){
 			
@@ -469,12 +465,12 @@ class NewPost extends Component {
 					this.setState({ loadingScene: false });
 					ImagePicker.clean().then(() => {
 					}).catch(e => {
-						alert(e);
+						console.log(e);
 					});
 					this.onCreateVideoPostData(url)
 				})
 				.catch(error => {
-					alert(error);
+					console.log(error);
 				});
 		} 
 		else {
@@ -512,11 +508,11 @@ class NewPost extends Component {
 			});
 			this.setState({ editDialog: { type : "camera", visible: false } })
 		  })
-		  .catch((e) => alert(e));
+		  .catch((e) => console.log(e));
 	  }
 
 	  renderVideo(video) {
-	//alert('rendering video');
+	
 		return (
 			// this.state.imageFile ?
 		  <View style={{ height: 100, width: 100 }}>
@@ -528,8 +524,8 @@ class NewPost extends Component {
 			  volume={1}
 			  muted={false}
 			  resizeMode={'cover'}
-			  onError={(e) =>alert(e)}
-			  onLoad={(load) => alert(load)}
+			  onError={(e) =>console.log(e)}
+			  onLoad={(load) => console.log(load)}
 			  repeat={true}
 			/>
 		  </View> 

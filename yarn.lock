@@ -9073,7 +9073,7 @@ interpolate-html-plugin@^4.0.0:
   dependencies:
     escape-string-regexp "^1.0.5"
 
-invariant@*, invariant@^2.2.2, invariant@^2.2.4:
+invariant@*, invariant@2.2.4, invariant@^2.2.2, invariant@^2.2.4:
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/invariant/-/invariant-2.2.4.tgz#610f3c92c9359ce1db616e538008d23ff35158e6"
   integrity sha512-phJfQVBuaJM5raOpJjSfkiD6BpbCE4Ns//LaXl6wGYtUBY83nWS6Rf9tXm2e8VaK60JEjYldbPif/A2B1C2gNA==
@@ -14055,6 +14055,11 @@ react-native-thumbnail-video@^0.1.2:
   resolved "https://registry.yarnpkg.com/react-native-thumbnail-video/-/react-native-thumbnail-video-0.1.2.tgz#a50e3c665ce987d641da43d2528e372cac111322"
   integrity sha512-+dD8dIUxiZz/QaL+gOtmb3Co/VE0MK5s8el9fYXpuEZbQu882voz7ALJmEn5o7A62sDTT3mpR2UF1V0ioXTFKA==
 
+react-native-thumbnail@^1.1.3:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/react-native-thumbnail/-/react-native-thumbnail-1.1.3.tgz#0fdd4ed2bbdc5d9407a2707580fd3fc4294a7050"
+  integrity sha512-x/9q9QPzq7BiHbpmPL/QrNrkxa4f+RQOAQ0Lw+p907jhpKpgojIo7pTTC/kvlyp+6YcYBeuq9sEELEEwzmk4nA==
+
 react-native-tts@^3.2.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/react-native-tts/-/react-native-tts-3.2.0.tgz#6c271c6809c164f86699b4b6c420f7bae0f68b4e"
@@ -14124,6 +14129,14 @@ react-native-watch-connectivity@0.3.1:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/react-native-watch-connectivity/-/react-native-watch-connectivity-0.3.1.tgz#0565db58fc199bfd988096c5547c679031a49355"
   integrity sha512-0iKAlOp25rtutLFS25ByWqR3orPN6GtLZRlW9e46emxt6+azFajUaO1YxBaBGV3j0wWhdTiENS2FQo2Q+Yoapw==
+
+react-native-webview@^11.2.3:
+  version "11.2.3"
+  resolved "https://registry.yarnpkg.com/react-native-webview/-/react-native-webview-11.2.3.tgz#1b82685ab60645d4161f2e25e98286493cdffa5d"
+  integrity sha512-r/K+Lf/O5aij72gRndMX2qsyQ/WLtDPiO75SS57y6JjqSKxedGASVL9Jwl1TM7fCXqUq8dgiwik/LuBHbJXAEg==
+  dependencies:
+    escape-string-regexp "2.0.0"
+    invariant "2.2.4"
 
 react-native@^0.63.4:
   version "0.63.4"

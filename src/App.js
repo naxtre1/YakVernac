@@ -42,6 +42,7 @@ import ThanksGame from './components/creategame/ThanksGame'
 import InAppPurchase from './components/InAppPurchase'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import VideoWebView from './components/VideoWebView'
 
 import {
     login,
@@ -978,6 +979,7 @@ const AppStack = createStackNavigator({
     PendingDrawing: { screen: PendingDrawingScreen },
     FriendsList: { screen: FriendsListScreen },
     NewPost: { screen: NewPost },
+    VideoWebView: { screen: VideoWebView},
     PostScreen: { screen: PostScreen },
     ViewPost: {
         screen: ViewPost,
