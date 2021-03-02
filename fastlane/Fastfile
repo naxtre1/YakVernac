@@ -16,7 +16,7 @@ XCODE_WORKSPACE = "./ios/YakVernac.xcworkspace"
 OUTPUT_DIRECTORY = "./fastlane/builds"
 IPA_DIRECTORY = "#{OUTPUT_DIRECTORY}/YakVernac.ipa"
 # TESTERS_FILE = "./fastlane/testers.txt"
-BUILD_FOR_DEVELOPMENT_ONLY = true # true = Build for Development | false = Build to create a release
+BUILD_FOR_DEVELOPMENT_ONLY = false # true = Build for Development | false = Build to create a release
 BUILD_ONLY = true #
 
 # Uncomment the line if you want fastlane to automatically update itself
