@@ -16,7 +16,7 @@ XCODE_WORKSPACE = "./ios/YakVernac.xcworkspace"
 OUTPUT_DIRECTORY = "./fastlane/builds"
 IPA_DIRECTORY = "#{OUTPUT_DIRECTORY}/YakVernac.ipa"
 # TESTERS_FILE = "./fastlane/testers.txt"
-BUILD_FOR_DEVELOPMENT_ONLY = false # true = Build for Development | false = Build to create a release
+BUILD_FOR_DEVELOPMENT_ONLY = true # true = Build for Development | false = Build to create a release
 BUILD_ONLY = true #
 
 # Uncomment the line if you want fastlane to automatically update itself
@@ -57,14 +57,13 @@ platform :ios do
 
     match(
       app_identifier: "com.yakvernac.yakvernac",
-      git_url: "https://github.com/meghaNax/YakVernac.git",
+      git_url: "git@github.com:meghaNax/YakVernac.git",
       type: "development",
       username: "wenno2u@gmail.com",
       team_id: "UY8K48LB7X",
       keychain_name: "Keychain",
       keychain_password: "naxtre",
-      readonly: true,
-      clone_branch_directly: true
+      readonly: true
       # git_private_key: 'fuIqky0JDQrmwI538TgLBSHtFXFKsFxLWNuTHPLvrH4'
     )
 
