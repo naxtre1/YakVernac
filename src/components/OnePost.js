@@ -27,48 +27,6 @@ const deviceWidth = Dimensions.get("window").width
 
 // export default function OnePost({ rowData, navigation, query, user, onSoundPlay, isblockList, startGame, refreshPage, setLoading }) 
 const OnePost = ({ rowData, navigation, query, user, onSoundPlay, isblockList, refreshPage, setLoading, setLang, lang }) => {
-    console.log("rowData");
-    console.log(rowData);
-    useEffect(() => {
-        if (!videoURL) {
-            return;
-          }
-      
-          createThumbnail({
-            url: videoURL,
-         
-          })
-            .then(response => {
-              setThumbnail(response.path);
-            })
-            .catch(error => alert({ error }));
-        firestore().collection('user').doc(rowData.uid).get().then(userProfileDoc => {
-            if (userProfileDoc.exists) {
-                const userProfile = userProfileDoc.data()
-                setUsername(userProfile.username)
-                setMyPic(userProfile.profilePics && userProfile.profilePics.length > 0 ? userProfile.profilePics[userProfile.profilePics.length - 1].illustration : userProfile.myPic)
-                setNotify(userProfile.nitify)
-            }
-
-        })
-        firestore().collection('Post').doc(rowData.id).collection('comment').orderBy('time').get().then(commentSnapshot => {
-            for (const doc of commentSnapshot.docs) {
-                const commentMessage = doc.data().commentMessage
-                const userID = doc.data().userID
-                firestore().collection('user').doc(userID).get().then(userDoc => {
-                    if (userDoc.exists) {
-                        const userData = userDoc.data()
-                        const playerId = userData.notify ? userData.playerId : ''
-                        const logoPic = userData.profilePics && userData.profilePics.length > 0 ? userData.profilePics[userData.profilePics.length - 1].illustration : userData.myPic
-                        const username = userData.username
-                        commentList.push({ userID, playerId, commentMessage, logoPic, username, commentid: doc.id })
-                        setCommentList([...commentList])
-                    }
-                })
-            }
-        })
-    }, [])
-
     const { uid, id, videoURL, audioURL, audioDuration, imageURL, isEn, isHide, postDate, postlang, postmessage, gameID, gameName, gameLang } = rowData
     const [username, setUsername] = useState(rowData.username)
     const [image, setImage] = useState(null);
@@ -80,6 +38,61 @@ const OnePost = ({ rowData, navigation, query, user, onSoundPlay, isblockList, r
     const [hiddenList, setHiddenList] = useState(rowData.hiddenList)
     const [path, setPath] = useState('');
     const [thumbnail, setThumbnail] = useState('');
+
+
+    useEffect(() => {
+     
+        // if (!videoURL) {
+           
+        //     return;
+        //   }
+  
+        //   createThumbnail({
+        //     url: videoURL,
+         
+        //   })
+        //     .then(response => {
+        //       setThumbnail(response.path);
+        //     })
+        //     .catch(error => alert({ error }));
+
+           firestore().collection('user').doc(rowData.uid).get().then(userProfileDoc => {
+     
+            if (userProfileDoc.exists) {
+               // alert(userProfileDoc)
+                const userProfile = userProfileDoc.data()
+                setUsername(userProfile.username)
+                setMyPic(userProfile.profilePics && userProfile.profilePics.length > 0 ? userProfile.profilePics[userProfile.profilePics.length - 1].illustration : userProfile.myPic)
+                setNotify(userProfile.nitify)
+           
+            }
+
+        })
+        firestore().collection('Post').doc(rowData.id).collection('comment').orderBy('time').get().then(commentSnapshot => {
+           
+            for (const doc of commentSnapshot.docs) {
+                const commentMessage = doc.data().commentMessage
+                const userID = doc.data().userID
+             
+                firestore().collection('user').doc(userID).get().then(userDoc => {
+                    if (userDoc.exists) {
+                        const userData = userDoc.data()
+                        console.log('userData',userDoc.data())
+                        const playerId = userData.notify ? userData.playerId : ''
+                        const logoPic = userData.profilePics && userData.profilePics.length > 0 ? userData.profilePics[userData.profilePics.length - 1].illustration : userData.myPic
+                        const username = userData.username
+                        commentList.push({ userID, playerId, commentMessage, logoPic, username, commentid: doc.id })
+                        setCommentList([...commentList])
+                    }
+                })
+            }
+
+            
+          
+        })
+    }, [])
+
+  
     const renderViewMore = (onPress) => {
         return (
             <Text style={{ textAlign: 'right', fontSize: p(14), color: '#70adca', }} onPress={onPress}>{strings('FriendsList.read_more')}</Text>
@@ -162,48 +175,11 @@ const OnePost = ({ rowData, navigation, query, user, onSoundPlay, isblockList, r
         })
           .then(response => {
             setThumbnail(response.path);
+            au
           })
           .catch(error => alert({ error }));
       };
-    // const startGame = (uid, gameID) => {
-    //     // this.setState({ loadingScene: true })
-    //     setLoading(true)
-    //     firestore().collection('user').doc(uid).collection('games').doc(gameID).get().then(doc => {
-    //         if (doc.exists) {
-    //             const gameData = doc.data()
-    //             gameData['prevLang'] = lang
-    //             gameData['allCorrect'] = 0
-    //             var introductionCard = null
-    //             firestore().collection('user').doc(uid).collection('games').doc(gameID).collection('cards').get().then(snapshot => {
-    //                 const gameCards = []
-    //                 console.log("snapshot.docs : ", snapshot.docs);
-    //                 for (const doc of snapshot.docs) {
-    //                     const cardData = doc.data()
-    //                     if (cardData.type == 'introductions') {
-    //                         introductionCard = cardData
-    //                     } else {
-    //                         gameCards.push(cardData)
-    //                     }
-    //                 }
-    //                 shuffle(gameCards)
-    //                 if (introductionCard) {
-    //                     gameCards.push(introductionCard)
-    //                 }
-    //                 const oneCard = gameCards.pop()
-    //                 // this.setState({ loadingScene: false })
-    //                 setLoading(false)
-    //                 setLang({
-    //                     languageNative: gameData.lessonLanguage,
-    //                     languageLearning: lang.languageLearning
-    //                 })
-    //                 gameData.cards = gameCards.length
-    //                 console.log("gameCards : ", gameCards);
-    //                 navigation.push(oneCard.type, { oneCard, gameCards, gameData })
-    //             })
-    //         }
-    //     })
-    // }
-
+   
     const startGame = (uid, gameID) => {
         // this.setState({ loadingScene: true })
         setLoading(true)
@@ -310,13 +286,14 @@ const OnePost = ({ rowData, navigation, query, user, onSoundPlay, isblockList, r
     }
 
     if (query !== '' && username.toLowerCase() == query.toLowerCase()) {
+        alert(query)
         return <View />
     }
     if (hiddenList && hiddenList.indexOf(user.uid) != -1 || deleted) {
+       
         return <View />
     }
-    console.log('ritesh');
-    console.log(videoURL);
+
     return <View key={rowData.id} style={{
         width: '100%', backgroundColor: 'white', borderRadius: 7, padding: p(10), marginBottom: p(10), flex: 1,
         elevation: 2,
@@ -326,6 +303,7 @@ const OnePost = ({ rowData, navigation, query, user, onSoundPlay, isblockList, r
         shadowRadius: 6,
     }}>
         {/* fontFamily: 'bold', */}
+        
         <View style={{ height: p(60), width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
             <TouchableOpacity onPress={() => navigation.navigate('OtherProfile', { 'uid': uid })}>
                 <Image source={{ uri: myPic }} style={{ width: p(40), height: p(40), borderRadius: p(20) }} />
@@ -403,11 +381,7 @@ const OnePost = ({ rowData, navigation, query, user, onSoundPlay, isblockList, r
             {
                 videoURL !== undefined && videoURL !== ''&& 
                <View >
-                {/* <TouchableOpacity
-        title="Generate Thumbnail"
-        onPress={generate}
-      /> */}
-      {/* <Text  > ☆THUMBNAIL☆</Text> */}
+              
       
       {!!thumbnail && (
           <TouchableOpacity onPress={()=>{  navigation.navigate('VideoWebView', { videoUrl: videoURL }) }} >
@@ -422,9 +396,6 @@ const OnePost = ({ rowData, navigation, query, user, onSoundPlay, isblockList, r
         </TouchableOpacity>
       )}
  
-                   {/* <Thumbnail  url={"https://firebasestorage.googleapis.com/v0/b/yak-vernac-app.appspot.com/o/video%2FDwcooNweRCbM6E57m1VMwl4uMAW2%2F1613134693524.mp4?alt=media&token=3557eb55-a1d5-4511-98ba-3932baa7e444"} />  */}
-                          
-                  {/* <RNUrlPreview text={videoURL}/> */}
                 </View> 
             }
             <View style={{ marginLeft: p(10), marginTop: p(10), flexDirection: 'row', alignItems: 'center' }}>
@@ -568,6 +539,7 @@ const styles = {
 function mapStateToProps(state) {
     return {
         lang: state.lang
+  
         
     }
 }

@@ -483,12 +483,27 @@ class PostScreen extends Component {
 		  
 	}
 
+	onContinue(item) {
+		//  alert(item.id)
+		// this.setState({ query: 	this.state.query})
+	
+    }
+
+
 	getListViewItem = (item) => {  
-        // Alert.alert(item.key);  
+		this.setState({ query: item })
+		if(item.startsWith('#')){
+			let txtval = item.replace('#','')
+		
+					 this.allSearchData('postmessage', txtval)
+				}else{
+					this.allSearchData('postmessage', item)
+				}
+		
     }  
 
 	loadMoreData = async (isRefresh) => {
-		// alert('load data')
+		
 		this.setState({ loadingFromServer: true });
 		if (!this.state.referenceToOldestKey || isRefresh) {
 			firestore().collection('Post')
@@ -622,6 +637,7 @@ class PostScreen extends Component {
 					});
 					const postID = this.props.navigation.getParam('id')
 					if (postID) {
+						alert(postID)
 						var index = 0
 						var postIndex = 0
 						for (; index < reverseItems.length; index++) {
@@ -658,6 +674,7 @@ class PostScreen extends Component {
 				});
 		}
 	}
+
 
 
 
@@ -708,7 +725,10 @@ class PostScreen extends Component {
 							continue
 						}
 					}
-				
+					this.setState({
+						items: items,
+						// loadingScene: false
+					});
 					// const reverseItems = items.reverse()
 					// const allData = this.postSearchData('All');
 					
@@ -721,28 +741,28 @@ class PostScreen extends Component {
 
 
 
-	allSearchData = async (key) => {
+	allSearchData = async (key, val) => {
+		// alert(val)
 		this.setState({items: []})
-		let searchString = this.state.query;
-		this.storeData(searchString)
+		let searchString = val ? val : this.state.query;
 		this.setState({ searchTag: key });
-		if (key=== 'postmessage') {
-			searchString = '#' + searchString;	
+		if (key == 'postmessage') {
+				searchString = '#' + searchString;	
+				
 		}else if (key === 'All') {
 			this.usernameSearchData();
-			
-			// return;
 		}
 				this.setState({ loadingFromServer: true });
 					firestore().collection('Post')
 						.limit(10).where(key, '==', searchString)
 						.get()
-						.then((snapshot) => {
+						.then((snapshot) => {			
 							let items = [];
+							// alert( snapshot.docs);
 							for (const doc of snapshot.docs) {
 								try {
 									const data = doc.data()
-									// alert("snapshot : ", data);
+								
 									const item = {
 										id: doc.id,
 										uid: data.uid,
@@ -765,64 +785,42 @@ class PostScreen extends Component {
 										audioDuration: data.audioDuration,
 										isMore: false,
 										isAudioPlaying: false
-									}
-									
-										items.push(item)
-										//searchData.push(searchString)
-										
-									
-										// responseJson.forEach((item, key) => {
-										// 	var productID = item.id;
-										// 	items[productID] = item.username
-										//  })
-								//  alert(item)
-									
-									
+									}		
+										items.push(item)						
 								} catch (error) {
 									continue
 								}
 							}
-							// const reverseItems = items.reverse()
-
-						
-		
+							this.storeData(searchString)
 							this.setState({
 								items: items,
 								// loadingScene: false
 							});
-							// const postID = this.props.navigation.getParam('id')
-							// if (postID) {
-							// 	var index = 0
-							// 	var postIndex = 0
-							// 	for (; index < reverseItems.length; index++) {
-							// 		if (postID == reverseItems[index].id) {
-							// 			postIndex = index
-							// 			break
-							// 		}
-							// 	}
-							// 	// rowData={item}
-							// 	// index={index}
-							// 	// navigation={this.props.navigation}
-							// 	// query={this.state.query}
-							// 	// user={this.props.user}
-							// 	// onSoundPlay={this.onSoundPlay}
-							// 	// blockList={this.state.blockList}
-							// 	// startGame={this.startGame}
-							// 	// setTimeout(() => {
-							// 	// 	this.props.navigation.push('ViewPost', {
-							// 	// 		rowData: reverseItems[index],
-							// 	// 		index: postIndex,
-							// 	// 		navigation: this.props.navigation,
-							// 	// 		query: this.state.query,
-							// 	// 		user: this.props.user,
-							// 	// 		onSoundPlay: this.onSoundPlay,
-							// 	// 		blockList: this.state.blockList,
-							// 	// 		startGame: null,
-							// 	// 		refreshPage: this.refreshPage,
-							// 	// 		setLoading: this.setLoading
-							// 	// 	})
-							// 	// }, 1000)
-							// }
+							const postID = this.props.navigation.getParam('id')
+							if (postID) {
+								var index = 0
+								var postIndex = 0
+								for (; index < reverseItems.length; index++) {
+									if (postID == reverseItems[index].id) {
+										postIndex = index
+										break
+									}
+								}
+								setTimeout(() => {
+									this.props.navigation.push('ViewPost', {
+										rowData: reverseItems[index],
+										index: postIndex,
+										navigation: this.props.navigation,
+										query: this.state.query,
+										user: this.props.user,
+										onSoundPlay: this.onSoundPlay,
+										blockList: this.state.blockList,
+										startGame: null,
+										refreshPage: this.refreshPage,
+										setLoading: this.setLoading
+									})
+								}, 1000)
+							}
 							// this.setState({ referenceToOldestKey: snapshot.docs[snapshot.docs.length - 1].id, loadingFromServer: false });
 						});
 				} 
@@ -843,8 +841,10 @@ class PostScreen extends Component {
 		try {
 			if(this.state.searchData.indexOf(value) !== -1){
 			  }else{
+			
 				 this.state.searchData.push(value);
-				await AsyncStorage.setItem('@storage_Key', JSON.stringify(this.state.searchData))
+				 let reverseData = ( this.state.searchData).reverse()
+				await AsyncStorage.setItem('@storage_Key', JSON.stringify(reverseData))
 				// alert(this.state.searchData)
 			  }
 		
@@ -856,9 +856,11 @@ class PostScreen extends Component {
 	   readData = async () => {
 		try {	
 			const data = await AsyncStorage.getItem('@storage_Key');
+			this.setState({ searchTag: 'recentSearch' });
 		
 		  if (data !== null) {
-			this.setState({ searchTag: 'recentSearch' });
+			 
+			
 			this.setState({ searchData: JSON.parse(data) });
 			
 			// alert(this.state.searchData)
@@ -913,10 +915,29 @@ class PostScreen extends Component {
 									</View>
 								</View> */}
 								<View style={ Platform.OS === 'ios'?
-									{ height: p(40), flex: 1, marginLeft: p(12) ,  marginTop: p(30),alignSelf: 'center', justifyContent: 'center' }: { height: p(40), flex: 1, marginLeft: p(12) ,  marginTop: p(10),alignSelf: 'center', justifyContent: 'center' }}>
+									{ height: p(40), flex: 1, flexDirection:'row', marginLeft: p(12) ,  marginTop: p(30),alignSelf: 'center', justifyContent: 'center' }: { height: p(40), flex: 1, marginLeft: p(12) ,  marginTop: p(10),alignSelf: 'center', justifyContent: 'center' }}>
+									
+									<TouchableOpacity styles={{ alignSelf: 'center', justifyContent: 'center',padding: 30 }}
+											onPress={() => {
+												if(this.state.query!==''){
+													this.textInput.clear()
+													this.refreshPage()
+												}
+													
+															}}>
+<View style={{ margin:p(10)}}>
+										<AntDesign
+											name={'left'}
+												size={p(22)}
+											color={'white'}
+											backgroundColor='black'
+												/>
+												</View>
+										</TouchableOpacity>
+									
 									<TextInput style={{
-										paddingLeft: p(12),
-										width: '100%',
+										paddingLeft: p(18),
+										width: '90%',
 										height: 40,
 										borderRadius: 20,
 										fontSize: 15,
@@ -925,22 +946,35 @@ class PostScreen extends Component {
 										justifyContent: 'center',
 										alignSelf: 'center',
 										paddingTop: 0,
-										paddingBottom: 0
+										paddingBottom: 0,
+									
 									}}
+									  ref={input => { this.textInput = input }}
 										placeholder={strings('FriendsList.search_for')}
 										placeholderTextColor='#a8cbd4'
 										underlineColorAndroid="transparent"
 										autoCapitalize="none"
 										onChangeText={text => {
 											this.setState({ query: text})
-											if(text.length == 0){
+											if(text.length > 2){
+												// this.refreshPage()
+											
+											if(text.startsWith('#')){
+										let txtval = text.replace('#','')
+					
+												 this.allSearchData('postmessage', txtval)
+											}else{
+												this.allSearchData('postmessage', text)
+											}
+												
+											}else if(text.length == 0){
 												this.refreshPage()
 											}
 										}}
-										
+										value={this.state.query}
 										onFocus={() => this.readData()}
 									/>
-									<View style={{ position: 'absolute', right: p(0), justifyContent: 'center', alignItems: 'center', backgroundColor: '#c3e3e5', width: p(40), height: p(40), borderRadius: p(20) }}>
+									<View style={{ position: 'absolute', right: p(-10), justifyContent: 'center', alignItems: 'center', backgroundColor: '#c3e3e5', width: p(40), height: p(40), borderRadius: p(20) }}>
 										<Icon
 											name='search'
 											type='font-awesome'
@@ -1005,9 +1039,7 @@ class PostScreen extends Component {
 											this.allSearchData('postmessage')
 										}else{
 											alert("Please enter value for search")
-										}
-									
-								
+										}								
 									}} >
                                 <Text style={{ width: p(64), height: p(20), backgroundColor: 'white',  color: 'grey', textAlign: 'center', fontSize: 15, textAlignVertical: 'center' }}>{'TAGS'}</Text>
 								</TouchableOpacity>
@@ -1027,25 +1059,10 @@ class PostScreen extends Component {
 							}
 						
 						
-							
-							{/* <ScrollView scrollEnabled={true} style={{ marginTop: 10, flex: 1, marginHorizontal: p(20) }}>
-								{
-									this.state.items.map((rowData, index) =>
-										<OnePost
-											rowData={rowData}
-											index={index}
-											navigation={this.props.navigation}
-											query={this.state.query}
-											user={this.props.user}
-											onSoundPlay={this.onSoundPlay}
-											isblockList={this.state.blockList.indexOf(index) !== -1}
-											startGame={this.startGame}
-										/>
-									)
-								}
-							</ScrollView> */}
+				
 							{/* <View style={styles.MainContainer}> */}
-							{ this.state.query =='' && this.state.searchTag == '' ? <FlatList
+							{ this.state.query =='' && this.state.searchTag == ''  ? 
+							<FlatList
 								contentContainerStyle={{ paddingBottom: 16 }}
 								showsVerticalScrollIndicator={false}
 								showsHorizontalScrollIndicator={false}
@@ -1081,46 +1098,7 @@ class PostScreen extends Component {
 							// scrollEventThrottle={1000}
 							/>
 							
-	: 
-	 this.state.searchTag=='username'? 
-	// <View  >
-	// 	{ this.state.items.length == 0 &&  <Text style={{  paddingLeft: p(10), marginTop: p(15), fontSize: p(16), alignItems:'center', justifyContent:'center' }} >No Data found</Text> }
-		
-		<FlatList  
-	contentContainerStyle={{ padding: 16 }}
-	showsVerticalScrollIndicator={false}
-	showsHorizontalScrollIndicator={false}
-	data={this.state.items}
-	ListEmptyComponent={this.emptyComponent}
-	keyExtractor={(item, index) => `${index}`}
-			renderItem={({ item, index }) => {	
-				return (
-					<View style={{ flexDirection: 'row'}}>
-					 		 <Image source = {{ uri: item.myPic }} style={{ width: p(40), height: p(40), borderRadius: p(20), margin: p(10)}} />
-							<Text  style={{ paddingLeft: p(10), marginTop: p(15), fontSize: p(16) }}>{item.username}</Text>
-
-				 </View> 
-				) ;
-			} 
-			
-		}
-		/>
-		
-		
-		
-		
-		
-	// </View>
-	
-		// ListEmptyComponent={this.emptyComponent}
-		// 	renderItem={({item}) =>  
-		// // <View style={{ flexDirection: 'row'}}>
-		// 		// <Image source = {{ uri: item.myPic }} style={styles.imageView} />
-		// 		<Text  onPress={this.getListViewItem.bind(this, item)}>{item.username}</Text>
-		// </View>
-	 
- : this.state.searchTag=='postmessage' ?
-
+	: this.state.searchTag=='postmessage' ?
  		<FlatList  
 		 contentContainerStyle={{ padding: 16 }}
 		 showsVerticalScrollIndicator={false}
@@ -1130,108 +1108,75 @@ class PostScreen extends Component {
 		 keyExtractor={(item, index) => `${index}`}
 				 renderItem={({ item, index }) => {					 
 					 return (	  
-						<View style={{ flexDirection: 'row'}}>
-							<Image source={require('../assets/roundimg.png')}  style={{ width: p(40), height: p(40), borderRadius: p(20), margin: p(10)}} />
-							<Text  style={{ paddingLeft: p(10), marginTop: p(15), fontSize: p(16) }}>{item.postmessage}</Text>
-						</View> 
+						<OnePost
+						rowData={item}
+						index={index}
+						navigation={this.props.navigation}
+						query={this.state.query}
+						user={this.props.user}
+						onSoundPlay={this.onSoundPlay}
+						isblockList={false}
+						isblockList={this.state.blockList.indexOf(index) !== -1}
+						refreshPage={this.refreshPage}
+						setLoading={this.setLoading}
+					/>
+						// <View style={{ flexDirection: 'row'}}>
+						// 	<Image source={require('../assets/roundimg.png')}  style={{ width: p(40), height: p(40), borderRadius: p(20), margin: p(10)}} />
+						// 	<Text  style={{ paddingLeft: p(10), marginTop: p(15), fontSize: p(16) }}>{item.postmessage}</Text>
+						// </View> 
 					 );
 				 }}
-
-
-
-		// 		data={this.state.items}
-		// 		keyExtractor={item => item.userID}
-		// 		renderItem={({item}) =>  
-		// <Text  onPress={this.getListViewItem.bind(this, item)}>{item.postmessage}</Text>}  
-		// 		ItemSeparatorComponent={this.renderSeparator }
-				 /> : this.state.searchTag == 'recentSearch'? 
-			
- 		<FlatList  
-		 contentContainerStyle={{ padding: 16 }}
-		 showsVerticalScrollIndicator={false}
-		 showsHorizontalScrollIndicator={false}
-		 data={this.state.searchData}
-	
-		//  keyExtractor={(item, index) => `${index}`}
-		   	 renderItem={({ item , index}) => {					 
-			return (	  	
+				 /> : this.state.searchTag == 'recentSearch' ? <FlatList  
+			 contentContainerStyle={{ padding: 16 }}
+			 showsVerticalScrollIndicator={false}
+			 showsHorizontalScrollIndicator={false}
+			 data={this.state.searchData}
+			 keyExtractor={(item, id) => `${id}`}
+		   	 renderItem={({ item , id}) => {					 
+			return (	
 				<View style={{ flexDirection: 'column'}}>	
-				{/* <TouchableOpacity disabled={true}> */}
-					<Text  style={{ paddingLeft: p(10), marginTop: p(15), fontSize: p(16) }} >{item}</Text>
-					{/* </TouchableOpacity> */}
+					<TouchableOpacity onPress={() => {
+                                                  this.getListViewItem.bind(this, item)
+												//    this.textInput.setState(item)
+                                                }}>
+					<Text  style={{ paddingLeft: p(10), marginTop: p(15), fontSize: p(16) }} onPress={this.getListViewItem.bind(this, item)} >{item}</Text>
+				
+					</TouchableOpacity>  	
 				</View>
-			   
+				
 			);
 		}
-	} /> 	 : null	}
-			   {/* </View> 	  */}
-
-			   
-							
-
-							{/* <FlatList
-								contentContainerStyle={{ paddingBottom: 16 }}0
-								showsVerticalScrollIndicator={false}
-								showsHorizontalScrollIndicator={false}
-								data={this.state.items}
-								keyExtractor={(item, index) => `${index}`}
-								renderItem={({ item, index }) => {
-									
-									return (
-										<OnePost
-											rowData={item}
-											index={index}
-											navigation={this.props.navigation}
-											query={this.state.query}
-											user={this.props.user}
-											onSoundPlay={this.onSoundPlay}
-											isblockList={false}
-											isblockList={this.state.blockList.indexOf(index) !== -1}
-											refreshPage={this.refreshPage}
-											setLoading={this.setLoading}
-											// startGame={this.startGame}
-										
-											
-										/>
-									);
-								}}
-								onEndReached={({ distanceFromEnd }) => {
-									if (distanceFromEnd >= 0) {
-										this.loadMoreData(false);
-									}
-								}}
-								onEndReachedThreshold={0.2}
-								ListFooterComponent={this.renderFooter}
-							// scrollEventThrottle={1000}
-							/> */}
-
-							{/* <Modal isVisible={this.state.isModalVisible}
-							onBackdropPress={() => this.setState({ isModalVisible: false })}
-							onSwipeComplete={() => this.setState({ isModalVisible: false })}
-							swipeDirection="left">
-							<View style={{ flex: 1, alignSelf: 'center' }}>
-								<Text style={{ color: 'white', fontSize: p(16) }}>Description</Text>
-								<TextInput
-									style={styles.textArea}
-									multiline
-									placeholder={'What are you thinking...'}
-									onChangeText={(text) => this.setState({ text })}
-									value={this.state.text}
-								/>
-								<View style={{ flexDirection: 'row', marginTop: p(10) }}>
-									<View style={{ flex: 1 }} />
-									<TouchableOpacity style={styles.modalWrapper} onPress={() => this.onComment(currentIndex)}>
-										<Text style={styles.modalBtnText}>Send</Text>
-									</TouchableOpacity>
-
-									<TouchableOpacity style={styles.modalWrapper} onPress={() => this.setState({ isModalVisible: false })}>
-										<Text style={styles.modalBtnText}>Cancel</Text>
-									</TouchableOpacity>
-								</View>
-
-							</View>
-						</Modal> */}
-						</View> : <Spinner visible={this.state.loadingScene} />
+	} /> 	 :  this.state.searchTag == 'username' &&  <FlatList  
+				contentContainerStyle={{ padding: 16 }}
+		 showsVerticalScrollIndicator={false}
+		 showsHorizontalScrollIndicator={false}
+		 data={this.state.items}
+		 ListEmptyComponent={this.emptyComponent}
+		 keyExtractor={(item, index) => `${index}`}
+				 renderItem={({ item, index }) => {					 
+					 return (	  
+					// 	<OnePost
+					// 	rowData={item}
+					// 	index={index}
+					// 	navigation={this.props.navigation}
+					// 	query={this.state.query}
+					// 	user={this.props.user}
+					// 	onSoundPlay={this.onSoundPlay}
+					// 	isblockList={false}
+					// 	isblockList={this.state.blockList.indexOf(index) !== -1}
+					// 	refreshPage={this.refreshPage}
+					// 	setLoading={this.setLoading}
+					// />
+								<View style={{ flexDirection: 'row'}}>
+				 		 <Image source = {{ uri: item.myPic }} style={{ width: p(40), height: p(40), borderRadius: p(20), margin: p(10)}} />
+						<Text  style={{ paddingLeft: p(10), marginTop: p(15), fontSize: p(16) }}>{item.username}</Text>
+					
+			 </View> 
+					 );
+				 }}
+				 />
+	}		  
+</View> : <Spinner visible={this.state.loadingScene} />
 				}
 			
 
@@ -1239,6 +1184,12 @@ class PostScreen extends Component {
 		);
 	}
 }
+
+	// 	<View style={{ flexDirection: 'row'}}>
+			// 	 		 <Image source = {{ uri: item.myPic }} style={{ width: p(40), height: p(40), borderRadius: p(20), margin: p(10)}} />
+			// 			<Text  style={{ paddingLeft: p(10), marginTop: p(15), fontSize: p(16) }}>{item.username}</Text>
+					
+			//  </View> 
 
 const styles = {
 	container: {
