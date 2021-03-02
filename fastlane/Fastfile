@@ -63,7 +63,7 @@ platform :ios do
       team_id: "UY8K48LB7X",
       keychain_name: "Keychain",
       keychain_password: "naxtre",
-      readonly: false
+      readonly: true
     )
 
     update_code_signing_settings(
