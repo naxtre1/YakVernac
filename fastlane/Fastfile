@@ -64,6 +64,7 @@ platform :ios do
       keychain_name: "Keychain",
       keychain_password: "naxtre",
       readonly: true,
+      clone_branch_directly: true
       # git_private_key: 'fuIqky0JDQrmwI538TgLBSHtFXFKsFxLWNuTHPLvrH4'
     )
 
