@@ -56,14 +56,16 @@ platform :ios do
     )
 
     match(
-      app_identifier: "com.yakvernac.yakvernac",
       git_url: "git@github.com:meghaNax/YakVernac.git",
+      app_identifier: "com.yakvernac.yakvernac",
       type: "development",
-      username: "wenno2u@gmail.com",
+      username: "meghaNax",
       team_id: "UY8K48LB7X",
       keychain_name: "Keychain",
       keychain_password: "naxtre",
-      readonly: true
+      readonly: true,
+      ENV["FASTLANE_PASSWORD"] = "megha@naxtre123",
+      ENV["MATCH_PASSWORD"] = "megha@naxtre123"
       # git_private_key: 'fuIqky0JDQrmwI538TgLBSHtFXFKsFxLWNuTHPLvrH4'
     )
 
