@@ -63,9 +63,7 @@ platform :ios do
       team_id: "UY8K48LB7X",
       keychain_name: "Keychain",
       keychain_password: "naxtre",
-      readonly: true,
-      ENV["FASTLANE_PASSWORD"]: "megha@naxtre123",
-      ENV["MATCH_PASSWORD"]: "megha@naxtre123"
+      readonly: true
      
     )
 
