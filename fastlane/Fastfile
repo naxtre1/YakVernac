@@ -57,14 +57,15 @@ platform :ios do
 
     match(
       git_url: "git@github.com:meghaNax/YakVernac.git",
+      git_basic_authorization: Base64.encode64("meghaNax:dc0c4d6fa8f46e7e99aba17963c28ef73465c1c5"),
       app_identifier: "com.yakvernac.yakvernac",
       type: "development",
-      username: "meghaNax",
+      username: "megha.naxtre@gmail.com",
       team_id: "UY8K48LB7X",
       keychain_name: "Keychain",
       keychain_password: "naxtre",
       readonly: true
-     
+      # git_private_key: 'fuIqky0JDQrmwI538TgLBSHtFXFKsFxLWNuTHPLvrH4'
     )
 
     update_code_signing_settings(
