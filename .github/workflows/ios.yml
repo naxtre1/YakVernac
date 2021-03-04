@@ -10,6 +10,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:
+         repository: https://github.com/meghaNax/YakVernac.git
+         token: 401488b5ddbbd118823f2c1f64b43d0e00b448d7
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
