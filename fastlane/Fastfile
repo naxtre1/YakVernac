@@ -64,6 +64,7 @@ platform :ios do
       keychain_name: "Keychain",
       keychain_password: "naxtre",
       readonly: true
+      
     )
 
     update_code_signing_settings(
