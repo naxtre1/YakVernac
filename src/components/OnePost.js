@@ -175,7 +175,6 @@ const OnePost = ({ rowData, navigation, query, user, onSoundPlay, isblockList, r
         })
           .then(response => {
             setThumbnail(response.path);
-            au
           })
           .catch(error => alert({ error }));
       };

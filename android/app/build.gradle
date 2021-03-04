@@ -148,9 +148,6 @@ android {
         multiDexEnabled true
         setProperty("archivesBaseName", "YakVernac")
         manifestPlaceholders = [onesignal_app_id: "8f75150f-ba91-4fa4-a712-54ab1345b3e9",onesignal_google_project_number: "284275940374"]
-        testBuildType System.getProperty('testBuildType', 'debug')
-        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
-  
     }
     splits {
         abi {
@@ -183,7 +180,6 @@ android {
 //            signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
-            proguardFile "${rootProject.projectDir}/../node_modules/detox/android/detox/proguard-rules-app.pro"
 
         }
     }
@@ -228,9 +224,7 @@ dependencies {
 
     // Declare the dependencies for the Crashlytics and Analytics libraries
     // When using the BoM, you don't specify versions in Firebase library dependencies
-androidTestImplementation('com.wix:detox:+') { transitive = true }
-androidTestImplementation 'junit:junit:4.12'
-implementation "androidx.annotation:annotation:1.+"
+
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules

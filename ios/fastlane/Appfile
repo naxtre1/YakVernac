@@ -1,0 +1,8 @@
+app_identifier("com.yakvernac.yakvernac") # The bundle identifier of your app
+apple_id("wenno2u@gmail.com") # Your Apple email address
+
+itc_team_id("UY8K48LB7X") # App Store Connect Team ID
+team_id("UY8K48LB7X") # Developer Portal Team ID
+
+# For more information about the Appfile, see:
+#     https://docs.fastlane.tools/advanced/#appfile
