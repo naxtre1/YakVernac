@@ -11,8 +11,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-         repository: https://github.com/meghaNax/YakVernac.git
-         token: 401488b5ddbbd118823f2c1f64b43d0e00b448d7
+         repository: git@github.com:meghaNax/YakVernac.git
+       
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
@@ -35,7 +35,6 @@ jobs:
           CI_KEYCHAIN_PASSWORD: ${{ secrets.CI_KEYCHAIN_PASSWORD }}
           DEVELOPER_TEAM_ID: ${{ secrets.DEVELOPER_TEAM_ID }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-          run:   cd ios
         run: fastlane ios beta
       
       - name: Upload IPA
