@@ -42,7 +42,6 @@
 		12BCC04725BAC223009E50CB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		12C69CF12591D75000430DBB /* libRNCAsyncStorage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNCAsyncStorage.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		12C69CF32591D75000430DBB /* libnfstorage.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libnfstorage.tbd; path = usr/lib/libnfstorage.tbd; sourceTree = SDKROOT; };
-		12C69D012591D86300430DBB /* YakVernac-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "YakVernac-Bridging-Header.h"; sourceTree = "<group>"; };
 		12C69D022591D86300430DBB /* header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = header.swift; sourceTree = "<group>"; };
 		12FED4E225BAE80E00B14397 /* YakVernac.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = YakVernac.entitlements; path = YakVernac/YakVernac.entitlements; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* YakVernac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YakVernac.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -187,7 +186,6 @@
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				0D1FAE803C4C454CB4FF1CE6 /* Resources */,
 				117FB1EBA33E3E1C73D5CE62 /* Pods */,
-				12C69D012591D86300430DBB /* YakVernac-Bridging-Header.h */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -281,7 +279,7 @@
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = UY8K48LB7X;
 						LastSwiftMigration = 1210;
-						ProvisioningStyle = Manual;
+						ProvisioningStyle = Automatic;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -629,9 +627,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = YakVernac/YakVernacDebug.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 39;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = UY8K48LB7X;
@@ -647,7 +645,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.yakvernac.yakvernac;
 				PRODUCT_NAME = YakVernac;
-				PROVISIONING_PROFILE_SPECIFIER = Yakvernac_Distribution;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "YakVernac-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -662,8 +660,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = YakVernac/YakVernac.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 39;
 				DEVELOPMENT_TEAM = UY8K48LB7X;
 				ENABLE_BITCODE = YES;
@@ -678,7 +676,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.yakvernac.yakvernac;
 				PRODUCT_NAME = YakVernac;
-				PROVISIONING_PROFILE_SPECIFIER = Yakvernac_Distribution;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "YakVernac-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
