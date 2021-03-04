@@ -64,12 +64,12 @@ platform :ios do
       keychain_name: "Keychain",
       keychain_password: "naxtre",
       readonly: true
-      
+
     )
 
     update_code_signing_settings(
-      use_automatic_signing: false,
-      path: XCODE_PROJECT,
+      use_automatic_signing: true,
+      path: "./ios/YakVernac.xcodeproj",
       code_sign_identity: code_sign_identity,
       bundle_identifier: "com.yakvernac.yakvernac",
       profile_name: MY_PROFILE
