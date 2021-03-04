@@ -54,7 +54,7 @@ platform :ios do
       timeout: 3600,
       lock_when_sleeps: false
     )
-
+    
     match(
       app_identifier: "com.yakvernac.yakvernac",
       git_url: "https://github.com/meghaNax/YakVernac.git",
