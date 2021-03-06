@@ -30,7 +30,7 @@ platform :ios do
     export_options_method = "Distribution"
     code_sign_identity = "iPhone Distribution"
     MY_APP_ID = "com.yakvernac.yakvernac"
-    MY_PROFILE = "Yakvernac_Distribution"
+    MY_PROFILE = "match Development "com.yakvernac.yakvernac""
     MY_TEAM = "UY8K48LB7X"
     
     increment_build_number(xcodeproj: XCODE_PROJECT)
@@ -42,7 +42,7 @@ platform :ios do
 
     settings_to_override = {
       :BUNDLE_IDENTIFIER => "com.yakvernac.yakvernac",
-      :PROVISIONING_PROFILE_SPECIFIER => 'Yakvernac_Distribution',
+      :PROVISIONING_PROFILE_SPECIFIER => MY_PROFILE,
       :DEVELOPMENT_TEAM => MY_TEAM,
     }
 
@@ -69,7 +69,7 @@ platform :ios do
 
     update_code_signing_settings(
       use_automatic_signing: true,
-      path: "./ios/YakVernac.xcodeproj",
+      path: XCODE_PROJECT,
       code_sign_identity: code_sign_identity,
       bundle_identifier: "com.yakvernac.yakvernac",
       profile_name: MY_PROFILE
