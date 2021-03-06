@@ -30,7 +30,7 @@ platform :ios do
     export_options_method = "Distribution"
     code_sign_identity = "iPhone Distribution"
     MY_APP_ID = "com.yakvernac.yakvernac"
-    MY_PROFILE = "match Development "com.yakvernac.yakvernac""
+    MY_PROFILE = "match Development com.yakvernac.yakvernac"
     MY_TEAM = "UY8K48LB7X"
     
     increment_build_number(xcodeproj: XCODE_PROJECT)
