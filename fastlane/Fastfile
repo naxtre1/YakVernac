@@ -73,6 +73,7 @@ platform :ios do
       code_sign_identity: code_sign_identity,
       bundle_identifier: "com.yakvernac.yakvernac",
       profile_name: MY_PROFILE
+      
     )
 
     gym(
