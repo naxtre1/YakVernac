@@ -30,7 +30,7 @@ const GetStartedScreen = (props) => {
     }
 
     return (
-        <SafeAreaView style={styles.safeArea}>
+        <SafeAreaView testID="getStartedScreenView" style={styles.safeArea}>
             <ImageBackground source={require('../assets/home_bg.png')} style={{ flex: 1, resizeMode: 'cover' }}>
                 <View style={styles.headerContainer}>
                     {/* <TouchableOpacity style={styles.arrowBack} >
@@ -51,7 +51,7 @@ const GetStartedScreen = (props) => {
                             YAKVERNAC
                     </Text>
                         <Image source={require('../assets/bubble-earth.png')} style={styles.logo} resizeMode='contain' />
-                        <TouchableOpacity style={[styles.button, { backgroundColor: isAgree ? colors.blue : 'rgba(149,152,154,0.7)' }]}
+                        <TouchableOpacity testID="getStartedButton" style={[styles.button, { backgroundColor: isAgree ? colors.blue : 'rgba(149,152,154,0.7)' }]}
                             onPress={() => {
                                 if (isAgree) {
                                     props.navigation.navigate("WantToLearn");
@@ -61,7 +61,7 @@ const GetStartedScreen = (props) => {
                             }}>
                             <Text style={styles.buttonText}>{strings('GetStarted.GetStarted')}</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={[styles.outlineButton, { borderColor: isAgree ? colors.blue : 'rgba(149,152,154,0.7)' }]}
+                        <TouchableOpacity testID="getStartedLoginButton" style={[styles.outlineButton, { borderColor: isAgree ? colors.blue : 'rgba(149,152,154,0.7)' }]}
                             onPress={() => {
                                 if (isAgree) {
                                     props.navigation.navigate("LoginEmail", { title: strings('GetStarted.emailTitle'), isFromSignUp : false });

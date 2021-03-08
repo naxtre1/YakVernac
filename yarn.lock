@@ -6326,10 +6326,10 @@ detect-port-alt@1.1.6:
     address "^1.0.1"
     debug "^2.6.0"
 
-detox@^18.2.2:
-  version "18.2.2"
-  resolved "https://registry.yarnpkg.com/detox/-/detox-18.2.2.tgz#a6231f2f19b27d7ce479e81346491c0102f14851"
-  integrity sha512-+4foyz7HraKWAHavkmN4QKaWVUcWdqdnI5ftak1ilIloZaZPGHuIe1ymRC2xoWtpdIpvW6mRJkhm7TeJrZW9HA==
+detox@^18.7.1:
+  version "18.7.1"
+  resolved "https://registry.yarnpkg.com/detox/-/detox-18.7.1.tgz#b31ade66e7941975857035d4b44ada60fdfbc439"
+  integrity sha512-57kKFOb8cv8rJATTvczzwzN238WXTiUYjlcJCAt23zeCP8cCLflHNLB+9KGugLtJ8cpImrMki2DsaGB7hAbhbw==
   dependencies:
     bunyan "^1.8.12"
     bunyan-debug-stream "^1.1.0"

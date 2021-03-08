@@ -125,9 +125,10 @@
     "@react-native-community/eslint-config": "^0.0.5",
     "babel-jest": "^24.8.0",
     "babel-preset-react-native": "4.0.0",
-    "detox": "^18.2.2",
+    "detox": "^18.7.1",
     "eslint": "^6.0.1",
     "jest": "^24.8.0",
+    "jest-circus": "^26.6.3",
     "metro-react-native-babel-preset": "^0.55.0",
     "react-test-renderer": "16.8.6"
   },
